@@ -23,6 +23,10 @@ class Airline
     @days = days
   end
 
+  def self.next(destination, plane_type, departure_time, days)
+    Airline.new(destination, @@numbers - 1, plane_type, departure_time, days)
+  end
+
   def self.create_random_airline
     destination = @@destinations.sample
     flight_number = Airline.last_flight_number
@@ -33,8 +37,12 @@ class Airline
     Airline.new(destination, flight_number, plane_type, departure_time, days)
   end
 
+  def self.create_array_of_airlines(size)
+    Array.new(size).map! { Airline.create_random_airline }
+  end
+
   def self.last_flight_number
-    @@numbers
+    @@numbers - 1
   end
 
   def self.destinations
@@ -47,11 +55,11 @@ class Airline
 
   def to_s
     s = "Airline object:\n" +
-    "\tdestination = #{destination}\n" +
-    "\tflight_number = #{flight_number}\n"+
-    "\tplane_type = #{plane_type}\n"+
-    "\tdeparture_time = #{departure_time}\n"+
-    "\tdays:\n"
+      "\tdestination = #{destination}\n" +
+      "\tflight_number = #{flight_number}\n" +
+      "\tplane_type = #{plane_type}\n" +
+      "\tdeparture_time = #{departure_time}\n" +
+      "\tdays:\n"
     days.each { |day| s += "\t\t#{day}\n" }
     s
   end
@@ -61,41 +69,43 @@ def time(h, m)
   Time.new(0, nil, nil, h, m)
 end
 
-n = 50
-airlines = Array.new(n).map! { Airline.create_random_airline }
-airlines.each { |airline| puts airline.to_s }
+def task2
+  n = 50
+  airlines = Airline.create_array_of_airlines(n)
+  airlines.each { |airline| puts airline.to_s }
 
-puts "\n\nEnter index of destination:"
-Airline.destinations.each_index { |i| puts "#{i + 1}:\t#{Airline.destinations[i]}" }
-print "index:"
-dest_index = gets.chomp.to_f - 1
-if dest_index < 0 || dest_index > Airline.destinations.length
-  p 'Error: wrong index!'
-  return
-end
-airlines.find_all { |airline| airline.destination == Airline.destinations[dest_index] }.each { |airline| puts airline.to_s }
+  puts "\n\nEnter index of destination:"
+  Airline.destinations.each_index { |i| puts "#{i + 1}:\t#{Airline.destinations[i]}" }
+  print "index:"
+  dest_index = gets.chomp.to_f - 1
+  if dest_index < 0 || dest_index > Airline.destinations.length
+    p 'Error: wrong index!'
+    return
+  end
+  airlines.find_all { |airline| airline.destination == Airline.destinations[dest_index] }.each { |airline| puts airline.to_s }
 
-puts "\n\nEnter index of day in a week:"
-Airline.week_days.each_index { |i| puts "\t#{i + 1}: #{Airline.week_days[i]}" }
-print "index:"
-day_index = gets.chomp.to_f - 1
-if dest_index < 0 || dest_index > Airline.week_days.length
-  p 'Error: wrong index!'
-  return
-end
-airlines.find_all { |airline| airline.days.include?(Airline.week_days[day_index]) }.each { |airline| puts airline.to_s }
+  puts "\n\nEnter index of day in a week:"
+  Airline.week_days.each_index { |i| puts "\t#{i + 1}: #{Airline.week_days[i]}" }
+  print "index:"
+  day_index = gets.chomp.to_f - 1
+  if dest_index < 0 || dest_index > Airline.week_days.length
+    p 'Error: wrong index!'
+    return
+  end
+  airlines.find_all { |airline| airline.days.include?(Airline.week_days[day_index]) }.each { |airline| puts airline.to_s }
 
-puts "\n\nEnter time:"
-print "hours:"
-hours = gets.chomp.to_f
-unless (1...24) === hours
-  p 'Error: wrong hours!'
-  return
+  puts "\n\nEnter time:"
+  print "hours:"
+  hours = gets.chomp.to_f
+  unless (1...24) === hours
+    p 'Error: wrong hours!'
+    return
+  end
+  print "minutes:"
+  minutes = gets.chomp.to_f
+  unless (1...60) === minutes
+    p 'Error: wrong minutes!'
+    return
+  end
+  airlines.find_all { |airline| airline.days.include?(Airline.week_days[day_index]) && airline.departure_time > time(hours, minutes) }.each { |airline| puts airline.to_s }
 end
-print "minutes:"
-minutes = gets.chomp.to_f
-unless (1...60) === minutes
-  p 'Error: wrong minutes!'
-  return
-end
-airlines.find_all { |airline| airline.days.include?(Airline.week_days[day_index]) && airline.departure_time > time(hours, minutes) }.each { |airline| puts airline.to_s }
