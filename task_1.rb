@@ -37,11 +37,13 @@ end
 def task1
   puts 'type start:'
   start = gets.chomp.to_f
+  puts "start = #{start}"
 
   puts 'type finish:'
   finish = gets.chomp.to_f
-  if start > finish
-    puts 'Error: start > finish.'
+  puts "start = #{start}"
+  if start >= finish
+    puts 'Error: start >= finish.'
     return
   end
 
