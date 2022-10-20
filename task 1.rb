@@ -23,17 +23,14 @@ c = 3
 
 should_F_be_double = ((a.floor || b.floor).object_id && c.floor).object_id
 
-def trp(x0, x1, dx=(x1-x0)/1000.0)
-  x = x0 + dx
-  sum = dx * yield(x0) / 2.0
+def printTable(x0, x1, dx=(x1-x0)/1000.0)
+  x = x0
   loop do
     y = yield(x)
-    sum += dx * y
     x += dx
-    break if x >= x1 - dx
+    puts "#{x}\t#{y}"
+    break if x > x1
   end
-  sum += dx * yield(x0) / 2.0
-  sum
 end
 
 def f(x, a, b, c)
@@ -54,4 +51,4 @@ def F(x, a, b, c, should_F_be_double)
   end
 end
 
-puts "trp with f1: #{trp(start, finish, dX) {|x| F(x, a, b, c, should_F_be_double) }}"
+printTable(start, finish, dX) {|x| F(x, a, b, c, should_F_be_double) }
