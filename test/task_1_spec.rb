@@ -1,6 +1,6 @@
 require 'rspec'
 
-require_relative '../task_1'
+require_relative '../lib/task_1'
 
 describe 'TEST task 1' do
   context 'calculation' do
@@ -27,7 +27,6 @@ describe 'TEST task 1' do
     expected_answer.each_index { |i|
       it "should_F_be_double should return #{expected_answer[i]} when a = #{a[i]}, b = #{b[i]}, c = #{c[i]}" do
         real_answer = should_F_be_double(a[i], b[i], c[i])
-        #p real_answer
         expect(real_answer).to eq(expected_answer[i])
       end
     }

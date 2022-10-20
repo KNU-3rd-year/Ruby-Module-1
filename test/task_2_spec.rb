@@ -1,6 +1,6 @@
 require 'rspec'
 
-require_relative '../task_2'
+require_relative '../lib/task_2'
 
 describe 'TEST task 2' do
   context 'airline creation' do
