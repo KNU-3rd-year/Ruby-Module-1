@@ -29,7 +29,7 @@ def printTable(x0, x1, dx=(x1-x0)/1000.0)
     y = yield(x)
     x += dx
     puts "#{x}\t#{y}"
-    break if x > x1
+    break if x + dx > x1
   end
 end
 
