@@ -1,28 +1,3 @@
-puts 'type start:'
-start = gets.chomp.to_f
-
-puts 'type finish:'
-finish = gets.chomp.to_f
-
-if start > finish
-  puts 'Error: start > finish.'
-  return
-end
-
-puts 'type dX:'
-dX = gets.chomp.to_f
-
-if start + dX * 10 > finish # at least 10 iterations should be done!
-  puts 'Error: dX is too big.'
-  return
-end
-
-a = 1
-b = 2
-c = 3
-
-should_F_be_double = ((a.floor || b.floor).object_id && c.floor).object_id
-
 def printTable(x0, x1, dx=(x1-x0)/1000.0)
   x = x0
   loop do
@@ -43,12 +18,47 @@ def f(x, a, b, c)
   end
 end
 
-def F(x, a, b, c, should_F_be_double)
-  if should_F_be_double
+def should_F_be_double(a, b, c)
+  if (a.floor.nonzero? || b.floor.nonzero?) && c.floor.nonzero?
+    true
+  else
+    false
+  end
+end
+
+def F(x, a, b, c)
+  if should_F_be_double(a, b, c)
     return f(x, a, b, c)
   else
     return f(x, a, b, c).floor
   end
 end
 
-printTable(start, finish, dX) {|x| F(x, a, b, c, should_F_be_double) }
+def task1
+  puts 'type start:'
+  start = gets.chomp.to_f
+
+  puts 'type finish:'
+  finish = gets.chomp.to_f
+  if start > finish
+    puts 'Error: start > finish.'
+    return
+  end
+
+  puts 'type dX:'
+  dX = gets.chomp.to_f
+  if start + dX * 10 > finish # at least 10 iterations should be done!
+    puts 'Error: dX is too big.'
+    return
+  end
+  if dX <= 0
+    puts 'Error: dX is too small.'
+    return
+  end
+
+  a = 1
+  b = 2
+  c = 3
+
+  printTable(start, finish, dX) {|x| F(x, a, b, c) }
+end
